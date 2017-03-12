@@ -16,5 +16,3 @@ lm.login_view = 'login'
 SQLALCHEMY_TRACK_MODIFICATIONS = False
 from app import views, models # this syntax avoids circular import error
 
-login_manager = LoginManager()
-login_manager.init_app(app)
