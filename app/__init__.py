@@ -5,6 +5,9 @@ import os
 from flask_login import LoginManager
 from config import basedir
 
+import application
+
+
 app = Flask(__name__)
 app.config.from_object('config')
 db = SQLAlchemy(app)
