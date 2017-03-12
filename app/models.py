@@ -5,6 +5,12 @@ class User(db.Model):
     nickname = db.Column(db.String(64), index=True, unique=True)
     email = db.Column(db.String(120), index=True, unique=True)
     posts = db.relationship('Post', backref='author', lazy='dynamic')
+    password = db.Column(db.String(12), index=False, unique=False)
+
+    def __init__(self, nickname, email, password):
+        self.nickname = nickname
+        self.email = email
+        self.password = password
 
     @property
     def is_authenticated(self):

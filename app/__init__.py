@@ -3,7 +3,6 @@ from flask_sqlalchemy import SQLAlchemy
 
 import os
 from flask_login import LoginManager
-from flask_openid import OpenID
 from config import basedir
 
 app = Flask(__name__)
@@ -12,8 +11,10 @@ db = SQLAlchemy(app)
 
 lm = LoginManager()
 lm.init_app(app)
-oid = OpenID(app, os.path.join(basedir, 'tmp'))
 lm.login_view = 'login'
 
 SQLALCHEMY_TRACK_MODIFICATIONS = False
 from app import views, models # this syntax avoids circular import error
+
+login_manager = LoginManager()
+login_manager.init_app(app)
