@@ -1,4 +1,4 @@
-from app import application # File for secret env variables
+import websiteconfig # File for secret env variables
 
 WTF_CSRF_ENABLED = True  #for web forms, activates cross-site request forgery prevention
 SECRET_KEY = 'you-will-never-guess'
@@ -12,8 +12,8 @@ SQLALCHEMY_MIGRATE_REPO = os.path.join(basedir, 'db_repository')
 # mail server settings
 MAIL_SERVER = 'localhost'
 MAIL_PORT = 25
-MAIL_USERNAME = application.MAIL_USERNAME
-MAIL_PASSWORD = application.MAIL_PASSWORD
+MAIL_USERNAME = websiteconfig.MAIL_USERNAME
+MAIL_PASSWORD = websiteconfig.MAIL_PASSWORD
 
 # administrator list
-ADMINS = application.ADMIN_EMAILS
+ADMINS = websiteconfig.ADMIN_EMAILS
