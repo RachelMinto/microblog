@@ -80,6 +80,45 @@ def register():
         return redirect('/login')
     return render_template('register.html', error=error)
 
+@app.route('/follow/<nickname>')
+@login_required
+def follow(nickname):
+    user = User.query.filter_by(nickname=nickname).first()
+    if user is None:
+        flash('User %s not found.' % nickname)
+        return redirect(url_for('index'))
+    if user == g.user:
+        flash('You can\'t follow yourself.')
+        return redirect(url_for('user', nickname=nickname))
+    u = g.user.follow(user)
+    if u is None:
+        flash('Cannot follow ' + nickname + '.')
+        return redirect(url_for('user', nickname=nickname))
+    db.session.add(u)
+    db.session.commit()
+    flash('You are now followign ' + nickname + '!')
+    return redirect(url_for('user', nickname=nickname))
+
+@app.route('/unfollow/<nickname>')
+@login_required
+def unfollow(nickname):
+    user = User.query.filter_by(nickname=nickname).first()
+    if user is None:
+        flash('User %s not found.' % nickname)
+        return redirect(url_for('index'))
+    if user == g.user:
+        flash('You can\'t unfollow yourself.')
+        return redirect(url_for('user', nickname=nickname))
+    u = g.user.unfollow(user)
+    if u is None:
+        flash('Connot unfollow ' + nickname + '.')
+        return redirect(url_fr('user', nickname=nickname))
+    db.session.add(u)
+    db.session.commit()
+    flash('You have stopped following ' + nickname + '.')
+    return redirect(url_for('user', nickname=nickname))
+
+
 @app.route('/edit', methods=['GET', 'POST'])
 @login_required
 def edit():
@@ -123,6 +162,8 @@ def after_login(resp):
         nickname = User.make_unique_nickname(nickname)
         user = User(nickname = nickname, email = resp.email)
         db.session.add(user)
+        db.session.commit()
+        db.session.add(user.follow(uesr))
         db.session.commit()
     remember_me = False
     if 'remember_me' in session:
